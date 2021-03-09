@@ -1,32 +1,46 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Application.Activities;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
+using Reactivities.Controllers;
 
 namespace API.Controllers
 {
   public class ActivitiesController : BaseApiController
   {
-    private readonly DataContext _context;
-    public ActivitiesController(DataContext context)
-    {
-      _context = context;
-    }
-
     [HttpGet]
     public async Task<ActionResult<List<Activity>>> GetActivities()
     {
-      //戻り値　非同期　Activity のリスト　Activities DataContextで宣言した変数
-      return await _context.Activities.ToListAsync();
+      return await Mediator.Send(new List.Query());
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Activity>> GetActivity(Guid id)
     {
-      return await _context.Activities.FindAsync(id);
+      return await Mediator.Send(new Details.Query { Id = id });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateActivity(Activity activity)
+    {
+      return Ok(await Mediator.Send(new Create.Command { Activity = activity }));
+    }
+
+    // 引数　id, activity
+    [HttpPut("{id}")]
+    public async Task<IActionResult> EditActivity(Guid id, Activity activity)
+    {
+      // Mediatorに渡す前に  activity の Id を put した id に変える
+      activity.Id = id;
+      return Ok(await Mediator.Send(new Edit.Command { Activity = activity }));
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteActivity(Guid id)
+    {
+      return Ok(await Mediator.Send(new Delete.Command { Id = id }));
     }
   }
 }

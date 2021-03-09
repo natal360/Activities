@@ -1,11 +1,17 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace API.Controllers
+namespace Reactivities.Controllers
 {
+  [Route("api/[controller]")]
   [ApiController]
-  [Route("api/[controller]")] //[] の外に api/ 
   public class BaseApiController : ControllerBase
   {
+    private IMediator _mediator;
 
+    // ??=  nullの場合  手動で追加　using Microsoft.Extensions.DependencyInjection;
+    protected IMediator Mediator => _mediator ??= HttpContext.RequestServices
+        .GetService<IMediator>();
   }
 }
