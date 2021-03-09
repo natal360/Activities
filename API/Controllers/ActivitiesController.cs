@@ -30,7 +30,3 @@ namespace API.Controllers
     }
   }
 }
-
-//起動エラー　ファイル名　Controller 入力ミス
-//watch : Exited with error code -532462766
-//watch : Waiting for a file to change before restarting dotnet...
