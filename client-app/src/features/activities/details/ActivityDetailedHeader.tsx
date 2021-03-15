@@ -1,7 +1,10 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
+import { Link } from "react-router-dom";
 import { Button, Header, Item, Segment, Image } from "semantic-ui-react";
 import { Activity } from "../../../app/models/activity";
+import { format } from "date-fns";
+import ja from "date-fns/locale/ja";
 
 const activityImageStyle = {
   filter: "brightness(30%)",
@@ -38,7 +41,9 @@ export default observer(function ActivityDetailedHeader({ activity }: Props) {
                   content={activity.title}
                   style={{ color: "white" }}
                 />
-                <p>{activity.date}</p>
+                <p>
+                  {format(activity.date!, "Yo MMM do aa h:mm", { locale: ja })}
+                </p>
                 <p>
                   Hosted by <strong>Bob</strong>
                 </p>
@@ -50,7 +55,12 @@ export default observer(function ActivityDetailedHeader({ activity }: Props) {
       <Segment clearing attached="bottom">
         <Button color="teal">Join Activity</Button>
         <Button>Cancel attendance</Button>
-        <Button color="orange" floated="right">
+        <Button
+          as={Link}
+          to={`/manage/${activity.id}`}
+          color="orange"
+          floated="right"
+        >
           Manage Event
         </Button>
       </Segment>
