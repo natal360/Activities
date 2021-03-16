@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Activities;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Reactivities.Controllers;
 
@@ -29,11 +30,9 @@ namespace API.Controllers
       return HandleResult(await Mediator.Send(new Create.Command { Activity = activity }));
     }
 
-    // 引数　id, activity
     [HttpPut("{id}")]
     public async Task<IActionResult> EditActivity(Guid id, Activity activity)
     {
-      // Mediatorに渡す前に  activity の Id を put した id に変える
       activity.Id = id;
       return HandleResult(await Mediator.Send(new Edit.Command { Activity = activity }));
     }
